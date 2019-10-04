@@ -1,0 +1,37 @@
+<div class="card-container">
+    <div class="card">
+        <div class="card-header">
+            <img src="assets/images/Logo.png" alt="" height="42" width="42">
+            <label> Lime Stone</label>
+            <mat-divider></mat-divider>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <label for="">Todays Luck!</label>
+            </div>
+            <br>
+            <div class="row">
+                <label style="font-size:32px; text-transform: capitalize !important;">{{currentRestaurantName}}</label>
+            </div>
+            <div class="row" *ngIf="didReceiveGoogleResponse==true" style="display:flex;">
+                <div class="column">
+                    <label>Rating: {{currentRestaurantDetails.rating}}</label>
+                </div>
+                <div class="link-div" *ngIf="currentRestaurantDetails.vicinity">
+                    <label>Place: </label>
+                    <label>{{currentRestaurantDetails.vicinity}}</label>
+                </div>
+                <div class="column">
+                    <label>Open Now: 
+                        <span *ngIf="currentRestaurantDetails.isOPenNow">Yes</span>
+                        <span *ngIf="!currentRestaurantDetails.isOPenNow">No</span>
+                    </label>
+                </div>
+            </div>
+
+        </div>
+        <div class="row card-footer">
+            <button mat-flat-button color="primary" (click)="generateNewRestaurant()">Generate</button>
+        </div>
+    </div>
+</div>
