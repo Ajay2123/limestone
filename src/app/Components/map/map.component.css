@@ -1,0 +1,12 @@
+.match-parent {
+    width: 50vw;
+    height: 100vh;
+    z-index: 1;
+  }
+#geocoder {
+    position:fixed;
+    z-index:1;
+    width:100vw;
+    left:20px;
+    top:20px;
+}

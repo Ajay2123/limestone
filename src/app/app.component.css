@@ -8,7 +8,29 @@
     z-index: 1;
     top: 0px;
     left: 0px;
-    background-color: grey;
+    background-color:  #F6F6F4;
     background-repeat: no-repeat;
     background-size: cover;
+}
+.map{
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+    z-index: 2;
+    left: 0px;
+}
+.display{
+    border: 2px solid #CBD2D3;
+    border-radius: 10px;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+    z-index: 2;
+    right: 0px;
 }

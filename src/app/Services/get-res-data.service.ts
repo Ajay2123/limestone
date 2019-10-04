@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 })
 export class GetResDataService {
     private dataPath = '../../assets/Jsons/restaurants.json';
-    dataList: any;
+    dataList = '';
 
     dataUpdated: Subject<any> = new Subject<any>();
     constructor(private httpService: HttpClient) { }
@@ -17,9 +17,11 @@ export class GetResDataService {
     public getData() {
         return this.loadData();
     }
-    public setData(list: any) {
-        this.dataList = list;
-        console.log("Updated :", this.dataList);
+    public getApiResponse() {
+        return this.dataList;
+    }
+    public setData(res: any) {
+        this.dataList = res;
         this.dataUpdated.next(this.dataList);
     }
 }

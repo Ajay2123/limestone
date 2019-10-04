@@ -1,61 +1,66 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { } from 'googlemaps';
 import { GetResDataService } from 'src/app/Services/get-res-data.service';
+import { environment } from '../../../environments/environment';
+import * as mapboxgl from 'mapbox-gl';
+import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import { HttpClient } from '@angular/common/http';
+import { MapApiService } from 'src/app/Services/map-api.service';
 @Component({
     selector: 'app-map',
     templateUrl: './map.component.html',
     styleUrls: ['./map.component.css']
 })
 export class MapComponent implements OnInit {
-    userLongitude;
-    userLatitude;
-    constructor(private GetResService: GetResDataService) { }
-    @ViewChild('map') mapElement: any;
-    map: google.maps.Map;
-
+    constructor(private http: HttpClient, private mapApiService: MapApiService, private getResDataService: GetResDataService) {
+        this.coordinates = this.mapApiService.getUserCoord();
+    }
+    map: mapboxgl.Map;
+    coordinates: any;
+    marker = new mapboxgl.Marker({ color: '#008000' });
+    restaurant = new mapboxgl.Marker({ color: '#dd1021' });
+    setLocationMarker = (cord, marker) => marker.setLngLat(cord).addTo(this.map);
+    makeApiRequest = () => this.mapApiService.todaysRestaurant();
     ngOnInit() {
-        /*         this.getPosition().then(pos => {
-                    this.userLongitude = pos.lng;
-                    this.userLatitude = pos.lat;
-                }); */
-        // this.activateMap();
-        this.makePlacesRequest();
+        this.addMap();
+        this.mapApiService.coorUpdated.subscribe(() => this.coordinates = this.mapApiService.getUserCoord());
+        this.mapApiService.restaurantDetails.subscribe((res) => this.showMagicRestaurant(res));
     }
 
-    makePlacesRequest() {
-        const request = {
-            location: { lat: 57.7820819, lng: 14.1742995 },
-            radius: 8000,
-            types: ['restaurant']
-        };
-        const service = new google.maps.places.PlacesService(document.createElement('div'));
-        service.nearbySearch(request, (data, status) => {
-            if (status === google.maps.places.PlacesServiceStatus.OK) {
-                data.forEach(res => console.log(res));
-                const tempResDetails = data[Math.floor(Math.random() * data.length)];
-                let resDetails: any;
-                resDetails = {
-                    name: tempResDetails.name,
-                    rating: tempResDetails.rating,
-                    vicinity: tempResDetails.vicinity,
-                    isOPenNow: tempResDetails.opening_hours.open_now
-                };
-                this.GetResService.setData(resDetails);
-            }
-
+    addMap() {
+        Object.getOwnPropertyDescriptor(mapboxgl, 'accessToken').set(environment.mapbox.accessToken);
+        this.map = new mapboxgl.Map({
+            container: 'map',
+            zoom: 15,
+            center: [this.coordinates.lng, this.coordinates.lat]
         });
+        this.map.addControl(new mapboxgl.NavigationControl());
+        this.map.setStyle('mapbox://styles/mapbox/light-v10');
 
+        this.map.on('load', () => {
+            this.setLocationMarker([this.coordinates.lng, this.coordinates.lat], this.marker);
+            const geocoder = new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken,
+                mapboxgl,
+                zoom: 15,
+                placeholder: 'Enter an address or place name',
+            });
+            document.getElementById('geocoder').appendChild(geocoder.onAdd(this.map));
+            geocoder.on('result', (data) => this.queryResponse(data.result.center));
+        });
+        this.makeApiRequest();
     }
 
-    getPosition(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resp => {
-                resolve({ lng: resp.coords.longitude, lat: resp.coords.latitude });
-            },
-                err => {
-                    reject(err);
-                });
-        });
+    queryResponse(coord) {
+        // tslint:disable-next-line: one-variable-per-declaration
+        const queryLongitude = coord[0], queryLatitude = coord[1];
+        this.mapApiService.setUserCoord(queryLatitude, queryLongitude);
+        this.setLocationMarker(coord, this.marker);
+        this.makeApiRequest();
+    }
 
+    showMagicRestaurant(res) {
+        const restaurantName = res.place_name.split(',')[0].toUpperCase();
+        this.setLocationMarker(res.center, this.restaurant);
+        this.getResDataService.setData(restaurantName);
     }
 }

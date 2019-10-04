@@ -1,4 +1,8 @@
-<div class="app-container" [ngStyle]="{'background-image':'url(' + imgPath + ')'}">
-    <app-start-page></app-start-page>
-    <app-map></app-map>
+<div class="app-container">
+    <div class="row map">
+        <app-map></app-map>
+    </div>
+    <div class="row display">
+        <app-start-page></app-start-page>
+    </div>
 </div>
