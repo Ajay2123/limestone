@@ -34,7 +34,6 @@ export class StartPageComponent implements OnInit {
     }
 
     generateNewRestaurant() {
-        this.mapApiService.moveALittle();
         this.makeApiRequest();
         const res = this.getResData.getApiResponse();
         this.currentRestaurantName = res;

@@ -34,9 +34,11 @@ export class MapComponent implements OnInit {
             center: [this.coordinates.lng, this.coordinates.lat]
         });
         this.map.addControl(new mapboxgl.NavigationControl());
-        this.map.setStyle('mapbox://styles/mapbox/light-v10');
+        this.map.setStyle('mapbox://styles/ajay21/ck1lwi3hl01kp1dpomcl5507r');
 
         this.map.on('load', () => {
+
+
             this.setLocationMarker([this.coordinates.lng, this.coordinates.lat], this.marker);
             const geocoder = new MapboxGeocoder({
                 accessToken: mapboxgl.accessToken,

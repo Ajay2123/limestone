@@ -1,5 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgModule } from '@angular/core';
+import { MaterialModule } from './Components/shared/material.module';
 
+@NgModule({
+    imports: [
+        MaterialModule,
+    ]
+})
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',

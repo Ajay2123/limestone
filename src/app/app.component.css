@@ -8,7 +8,7 @@
     z-index: 1;
     top: 0px;
     left: 0px;
-    background-color:  #F6F6F4;
+    background-color: rgb(162,170,152,0.3);
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -17,20 +17,20 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50%;
+    width: 70%;
     height: 100%;
     z-index: 2;
     left: 0px;
 }
 .display{
-    border: 2px solid #CBD2D3;
-    border-radius: 10px;
     position: fixed;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50%;
+    width: 30%;
     height: 100%;
-    z-index: 2;
+    z-index: 5;
     right: 0px;
+    border: 1px solid #B3C4CE;
+
 }
